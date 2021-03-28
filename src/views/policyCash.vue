@@ -7,9 +7,10 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'; 
+export default defineComponent({
   name: 'policyCash',
-}
+})
 </script>
 <style lang="scss">
 .policy-cash{

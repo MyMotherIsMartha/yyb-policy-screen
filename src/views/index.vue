@@ -11,6 +11,10 @@
         <BarChart class="left-chart"/>
         <PieChart class="right-chart" />
       </div>
+
+      <div class="height-20"></div>
+
+      <AreaCash />
     </div>
   </div>
   
@@ -22,17 +26,19 @@ import Header from '../components/Header.vue'
 import PolicyCash from './policyCash.vue'
 import BarChart from './barChart.vue';
 import PieChart from './pieChart.vue';
+import AreaCash from './areaCash.vue';
 export default defineComponent({
   name: 'Index',
   components: {
     Header,
     PolicyCash,
     BarChart,
-    PieChart
+    PieChart,
+    AreaCash
   },
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .content-wrap{
     background: #EAECEF;
     padding: 20px 30px 100px;

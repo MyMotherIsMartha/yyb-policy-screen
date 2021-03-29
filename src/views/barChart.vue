@@ -1,15 +1,21 @@
 <template>
   <div class="bar-chart">
-    <div ref="barChart" :style="{ width: '100%', height: '380px' }"></div>
+    <Title>区域政策发布总览（TOP7）</Title>
+    <div class="bar" ref="barChart"></div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import { ref } from "vue";
 import * as echarts from "echarts";
+import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import Title from '../components/Title.vue';
 export default defineComponent({
   name: 'barChart',
-  components: {},
+  components: {
+    Title
+  },
   setup() {
     const state = reactive({ 
       barChart: ref<any>()
@@ -22,22 +28,44 @@ export default defineComponent({
     });
 
     const initCharts = () => {
-      var myChart = echarts.init(state.barChart);
+      const myChart = echarts.init(state.barChart);
  
       // 指定图表的配置项和数据
-      var option = {
+      const option = {
+        grid: {
+          top: 15,
+          bottom: 20,
+          left: 0,
+          right: 0,
+          containLabel: true
+        },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: ['郢州', '江北', '海曙', '大榭', '东钱湖', '镇海', '北仑'],
+          axisLabel: {
+            textStyle: {
+              fontSize: 20
+            }
+          }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+            textStyle: {
+              fontSize: 20
+            }
+          }
+        },
+        tooltip: {
+          trigger: "item",
         },
         series: [{
           data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar'
+          type: 'bar',
+          color: '#00A3E5',
+          barWidth: 30,
         }]
-      };
+      }
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     };
@@ -49,3 +77,12 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+  .bar-chart{
+    padding: 20px 30px;
+    .bar{
+      margin-top: 30px;
+      height: 320px;
+    }
+  }
+</style>

@@ -1,19 +1,17 @@
 <template>
-  <div class="bar-chart">
+  <Card class="bar-wrapper">
     <Title>市级部门占比</Title>
-    <div class="pie" ref="pieChart"></div>
-  </div>
+    <div class="pie" ref="chartEle"></div>
+  </Card>
 </template>
-<script >
+<script lang="ts">
 import * as echarts from "echarts";
-import Title from '../components/Title.vue';
+import Title from './Title.vue';
+import Card from './Card.vue';
 import { mapGetters } from 'vuex';
 import {zcfzb} from "@/api/home";
+
 export default {
-  name: 'barChart',
-  components: {
-    Title
-  },
   data() {
     return {
       chart: null
@@ -30,7 +28,7 @@ export default {
     }
   },
   mounted() {
-    this.chart = echarts.init(this.$refs.pieChart);
+    this.chart = echarts.init(this.$refs.chartEle);
     // 指定图表的配置项和数据
     const option = {
       tooltip: {
@@ -39,35 +37,37 @@ export default {
       legend: {
         orient: "vertical",
         right: "0",
-        top: '0',
+        top: 'center',
       },
       series: [
         {
-            name: '市级部门占比 ',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            center: ['30%', '55%'],
-            avoidLabelOverlap: false,
+          name: "市级部门占比",
+          type: "pie",
+          radius: ['35%', '65%'],
+          center: ['26%', '50%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+              borderRadius: 4,
+              borderColor: '#fff',
+              borderWidth: 2
+          },
+          label: {
+              show: false,
+              position: 'center'
+          },
+          labelLine: {
+              show: false
+          },
+          data: [
+          ],
+          emphasis: {
             itemStyle: {
-                borderRadius: 5,
-                borderColor: '#fff',
-                borderWidth: 2
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
             },
-            label: {
-                show: false,
-                position: 'center'
-            },
-            labelLine: {
-                show: false
-            },
-            data: [
-                {value: 1048, name: '搜索引擎'},
-                {value: 735, name: '直接访问'},
-                {value: 580, name: '邮件营销'},
-                {value: 484, name: '联盟广告'},
-                {value: 300, name: '视频广告'}
-            ]
-        }
+          },
+        },
       ],
     }
     // 使用刚指定的配置项和数据显示图表。
@@ -77,8 +77,6 @@ export default {
     getData() {
       zcfzb().then(res => {
         this.initChart(res)
-        console.log(res)
-        
       })
     },
     initChart(data) {
@@ -94,15 +92,15 @@ export default {
         }]
       })
     }
-  }
-}
+  },
+  components: {
+    Title,
+    Card,
+  },
+};
 </script>
 <style lang="scss" scoped>
-  .bar-chart{
-    padding: 20px 30px;
-    .pie{
-      margin-top: 30px;
-      height: 320px;
-    }
-  }
+.pie {
+  height: 280px;
+}
 </style>

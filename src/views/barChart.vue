@@ -1,51 +1,102 @@
 <template>
   <div class="bar-chart">
-    <div ref="barChart" :style="{ width: '100%', height: '380px' }"></div>
+    <Title>区域政策发布总览（TOP7）</Title>
+    <div class="bar" ref="barChart"></div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs } from 'vue';
-import { ref } from "vue";
+<script>
 import * as echarts from "echarts";
-export default defineComponent({
+import Title from '../components/Title.vue';
+import {zcfbl} from "@/api/home";
+import { mapGetters } from 'vuex';
+export default {
   name: 'barChart',
-  components: {},
-  setup() {
-    const state = reactive({ 
-      barChart: ref<any>()
-    })
-
-    
-    onMounted(() => {
-      initCharts();
-      console.log('barchart:', state.barChart)
-    });
-
-    const initCharts = () => {
-      var myChart = echarts.init(state.barChart);
- 
-      // 指定图表的配置项和数据
-      var option = {
+  components: {
+    Title
+  },
+  data() {
+    return {
+      chart: null
+    }
+  },
+  computed: {
+    ...mapGetters(['token']),
+  },
+  watch: {
+    'token': function (val, oldVal) {
+      if (val) {
+        this.getData()
+      }
+    }
+  },
+  mounted() {
+    this.chart = echarts.init(this.$refs.barChart);
+    // 指定图表的配置项和数据
+    const option = {
+        grid: {
+          top: 15,
+          bottom: 20,
+          left: 0,
+          right: 0,
+          containLabel: true
+        },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: [],
+          axisLabel: {
+            
+              fontSize: 16
+            
+          }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+            textStyle: {
+              fontSize: 20
+            }
+          }
+        },
+        tooltip: {
+          trigger: "item",
         },
         series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar'
+          data: [],
+          type: 'bar',
+          color: '#00A3E5',
+          barWidth: 30,
         }]
-      };
+      }
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    };
-
-    return {
-      // barChart,
-      ...toRefs(state)
-    };
+      this.chart.setOption(option);
+  },
+  methods: {
+    getData() {
+      zcfbl().then(res => {
+        this.initChart(res.splice(0, 7))
+      })
+    },
+    initChart(data) {
+      let xAxisData = data.map(item => item.areaName)
+      let seriesData = data.map(item => item.count)
+      this.chart.setOption({
+        xAxis: {
+          data: xAxisData
+        },
+        series: [{
+          data: seriesData
+        }]
+      })
+    }
   }
-})
+}
 </script>
+<style lang="scss" scoped>
+  .bar-chart{
+    padding: 20px 30px;
+    .bar{
+      margin-top: 30px;
+      height: 320px;
+    }
+  }
+</style>

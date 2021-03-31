@@ -12,19 +12,20 @@ export default {
 </script>
 <style lang="scss" scoped>
   .header-wrap{
-    height: 137.3928px;
+    height: 200px;
     width: 100%;
-    text-align: center;
-    background: url('../assets/img/header-bg.png') no-repeat 0 0;
+    text-align: left;
+    padding-left: 60px;
+    background: url('../assets/img/mobile-header-bg.png') no-repeat 0 0;
     background-size: 100% 100%;
     overflow: hidden;
     .title{
       margin-top: 20px;
-      font-size: 44px;
+      font-size: 40px;
       color: #fff;
     }
     .sub-title{
-      font-size: 20px;
+      font-size: 19px;
       color: #fff;
     }
   }
